@@ -1,0 +1,18 @@
+version: 0.2
+
+phases:
+  pre_build:
+    commands:
+      - echo Logging in to Amazon ECR...
+      - aws ecr get-login-password --region ap-southeast-2 | docker login --username AWS --password-stdin 898822300647.dkr.ecr.ap-southeast-2.amazonaws.com
+  build:
+    commands:
+      - echo Build started on `date`
+      - echo Building the Docker image...
+      - docker build -t nginx .
+      - docker tag nginx:latest 898822300647.dkr.ecr.ap-southeast-2.amazonaws.com/bundlemodernization-dev-ecr:dev
+  post_build:
+    commands:
+      - echo Build completed on `date`
+      - echo Pushing the Docker image...
+      - docker push 898822300647.dkr.ecr.ap-southeast-2.amazonaws.com/bundlemodernization-dev-ecr:dev
